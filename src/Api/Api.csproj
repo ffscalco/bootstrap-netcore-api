@@ -8,6 +8,11 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Mappings\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Handlers\" />
+    <Folder Include="Handlers\Authentication\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Validators\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

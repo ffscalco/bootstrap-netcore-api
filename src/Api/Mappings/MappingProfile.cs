@@ -1,5 +1,7 @@
 ﻿using System;
+using Api.ViewModels;
 using AutoMapper;
+using Core.Models;
 
 namespace Api.Mappings
 {
@@ -7,6 +9,9 @@ namespace Api.Mappings
     {
         public MappingProfile()
         {
+            CreateMap<User, LoggedUserVM>()
+                .ForMember(x => x.Token, opt => opt.Ignore())
+                .ForMember(x => x.Expiration, opt => opt.Ignore());
         }
     }
 }
