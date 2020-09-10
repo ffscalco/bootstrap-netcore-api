@@ -1,4 +1,5 @@
 using System;
+using Api.Helpers;
 using AutoMapper;
 using Core;
 using Core.Models;
@@ -70,6 +71,8 @@ namespace Api
             app.UseRouting();
 
             app.UseCors();
+
+            app.UseImperiusExceptionMiddleware();
 
             app.UseAuthentication();
             app.UseAuthorization();
