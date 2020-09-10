@@ -87,7 +87,10 @@ namespace Data.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .IsRequired();
+
+                    b.HasIndex("Email").IsUnique();
 
                     b.Property<string>("Firstname")
                         .IsRequired()
