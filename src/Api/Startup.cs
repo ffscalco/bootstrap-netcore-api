@@ -1,6 +1,9 @@
 using System;
+using AutoMapper;
+using Core;
 using Core.Models;
 using Data;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -24,9 +27,17 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
+            });
             services.AddDbContext<ImperiusDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Default")));
+
+            ConfigureCors(services);
+            services.AddMediatR(typeof(Startup));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddSwaggerGen(options =>
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Imperius", Version = "v1" }));
@@ -45,11 +56,20 @@ namespace Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.RoutePrefix = "";
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Imperius V1");
+                });
             }
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -57,6 +77,22 @@ namespace Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+        }
+
+        private void ConfigureCors(IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins(Configuration["AllowedAddresses:Default"])
+                                            .AllowAnyOrigin()
+                                            .AllowAnyMethod()
+                                            .AllowAnyHeader()
+                                            .WithExposedHeaders("X-Pagination");
+                    });
             });
         }
     }
