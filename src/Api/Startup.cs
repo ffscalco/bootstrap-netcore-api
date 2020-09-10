@@ -42,7 +42,7 @@ namespace Api
             services.AddSwaggerGen(options =>
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Imperius", Version = "v1" }));
 
-            services.AddIdentity<Athlete, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ImperiusDbContext>()
                 .AddDefaultTokenProviders();

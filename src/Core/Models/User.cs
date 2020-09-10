@@ -4,13 +4,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Core.Models
 {
-    public class Athlete : IdentityUser
+    public class User : IdentityUser
     {
         [Required]
         public string Firstname { get; set; }
         [Required]
         public string Lastname { get; set; }
-
-        public DateTime? DateJoined { get; set; }
     }
 }

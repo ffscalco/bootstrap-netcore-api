@@ -10,7 +10,5 @@ namespace Data
             : base(options)
         {
         }
-
-        public DbSet<Athlete> Athletes { get; set; }
     }
 }
