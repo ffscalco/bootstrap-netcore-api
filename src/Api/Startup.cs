@@ -74,7 +74,9 @@ namespace Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            UserManager<User> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -103,6 +105,22 @@ namespace Api
             {
                 endpoints.MapControllers();
             });
+
+            UpdateDatabase(app);
+            SeedData.Seed(userManager, roleManager);
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<ImperiusDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
 
         private void ConfigureCors(IServiceCollection services)
