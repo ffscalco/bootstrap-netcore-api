@@ -10,5 +10,7 @@ namespace Data
             : base(options)
         {
         }
+
+        public DbSet<User> AspNetUsers { get; set; }
     }
 }
