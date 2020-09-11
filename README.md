@@ -41,6 +41,16 @@ If you need to undo an applied migration, use the below command to go back to a 
 $ dotnet ef database update TargetMigrationName --project src/Data --startup-project src/Api
 ```
 
+5. To run the project tests, you can start them through Visual Studio or run the following command in your terminal:
+```sh
+$ cd src; dotnet test
+```
+
+5.1 To run the tests with coverage, use the following command:
+```sh
+$ cd src; dotnet test /p:CollectCoverage=true
+```
+
 ## Project Architecture
 
 This solution has 4 projects:
