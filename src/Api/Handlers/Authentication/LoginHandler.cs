@@ -15,22 +15,23 @@ using Newtonsoft.Json;
 using Api.Validators;
 using Services.Helpers;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 
 namespace Api.Handlers.Authentication
 {
     public class LoginHandler : IRequestHandler<AuthenticateVM, LoggedUserVM>
     {
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
         public LoginHandler(UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager,
-            IMapper mapper)
+            IMapper mapper,
+            IConfiguration configuration)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         public async Task<LoggedUserVM> Handle(AuthenticateVM model, CancellationToken cancellationToken)
@@ -57,11 +58,11 @@ namespace Api.Handlers.Authentication
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT:Secret")));
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
                 var token = new JwtSecurityToken(
-                    issuer: Environment.GetEnvironmentVariable("JWT:ValidIssuer"),
-                    audience: Environment.GetEnvironmentVariable("JWT:ValidAudience"),
+                    issuer: _configuration["JWT:ValidIssuer"],
+                    audience: _configuration["JWT:ValidAudience"],
                     expires: DateTime.Now.AddHours(3),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
