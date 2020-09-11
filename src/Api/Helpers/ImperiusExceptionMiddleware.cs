@@ -42,7 +42,8 @@ namespace Api.Helpers
             var result = JsonConvert.SerializeObject(new
             {
                 StatusCode = statusCode,
-                ErrorMessage = exception.Message
+                ErrorMessage = exception.Message,
+                ErrorStack = exception.StackTrace
             });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = statusCode;
