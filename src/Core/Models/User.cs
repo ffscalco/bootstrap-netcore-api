@@ -7,8 +7,8 @@ namespace Core.Models
     public class User : IdentityUser
     {
         [Required]
-        public string Firstname { get; set; }
+        public string FirstName { get; set; }
         [Required]
-        public string Lastname { get; set; }
+        public string LastName { get; set; }
     }
 }
