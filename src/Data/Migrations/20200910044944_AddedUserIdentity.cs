@@ -29,6 +29,7 @@ namespace Data.Migrations
                     Id = table.Column<string>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                    Discriminator = table.Column<string>(nullable: false),
                     Email = table.Column<string>(maxLength: 256, nullable: false),
                     FirstName = table.Column<string>(maxLength: 256, nullable: false),
                     LastName = table.Column<string>(maxLength: 256, nullable: false),
